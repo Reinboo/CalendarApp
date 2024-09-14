@@ -9,6 +9,7 @@ import * as LocalAuthentication from "expo-local-authentication";
 import auth from "@react-native-firebase/auth";
 import React, { useState, useEffect } from "react";
 import { Link, router } from "expo-router";
+import { Routes } from "@/constants/Routes";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ export default function SignInPage() {
     try {
       await auth().signInWithEmailAndPassword(email, password);
       Alert.alert("Login successful");
-      router.push("/");
+      router.push(Routes.profile);
     } catch (error: any) {
       Alert.alert("Login failed", error.message);
     }

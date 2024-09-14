@@ -4,8 +4,13 @@ import { StyleSheet } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Button } from "react-native-elements";
+import auth from "@react-native-firebase/auth";
+import { useUser } from "@/hooks/useUser";
 
 export default function ProfilePage() {
+  const userContext = useUser();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -15,6 +20,13 @@ export default function ProfilePage() {
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText>PROFILE</ThemedText>
+        <ThemedText>Name: {userContext?.user?.email}</ThemedText>
+        <Button
+          onPress={() => {
+            auth().signOut();
+          }}
+          title={"SIGNOUT"}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );
