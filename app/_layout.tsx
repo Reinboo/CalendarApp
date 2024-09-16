@@ -3,7 +3,11 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { useFonts } from "expo-font";
+import {
+  Inter_900Black,
+  Inter_400Regular,
+  Inter_600SemiBold,
+} from "@expo-google-fonts/inter";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
@@ -28,8 +32,9 @@ registerSheet("changePassword", ChangePassword, "global");
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SFPro: require("../assets/fonts/SF-Pro.ttf"),
-    // SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    InterBolder: Inter_900Black,
+    InterBold: Inter_600SemiBold,
+    Inter: Inter_400Regular,
   });
 
   useEffect(() => {

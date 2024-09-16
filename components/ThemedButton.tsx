@@ -25,8 +25,9 @@ export function ThemedButton({
 }: ThemedButtonProps) {
   return (
     <Pressable
-      style={
+      style={({ pressed }) =>
         [
+          { opacity: pressed ? 0.8 : 1 },
           type === "default" ? styles.default : undefined,
           type === "subtitle" ? styles.subtitle : undefined,
           type === "link" ? styles.link : undefined,
@@ -54,7 +55,7 @@ export function ThemedButton({
 
 const styles = StyleSheet.create({
   shared: {
-    fontFamily: "SFPro",
+    fontFamily: "Inter",
   },
   default: {
     display: "flex",
@@ -73,21 +74,23 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 12,
   },
-  link: {},
+  link: {
+    lineHeight: 24,
+  },
   defaultText: {
     fontSize: 22,
-    fontWeight: "bold",
     lineHeight: 24,
+    fontFamily: "InterBold",
     color: Colors.light.background,
   },
   subtitleText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "InterBold",
     color: Colors.light.text,
   },
   linkText: {
     lineHeight: 30,
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.light.highlight,
   },
 });
