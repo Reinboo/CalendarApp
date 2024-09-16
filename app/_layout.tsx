@@ -45,19 +45,13 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="profile" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(auth)/sign-in"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="(auth)/sign-up"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+        <SheetProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="profile" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </SheetProvider>
       </ThemeProvider>
     </UserProvider>
   );
