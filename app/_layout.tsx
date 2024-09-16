@@ -12,9 +12,18 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { UserProvider } from "@/hooks/useUser";
+import { registerSheet, SheetProvider } from "react-native-actions-sheet";
+import Authentication from "@/components/Authentication";
+import { useFonts } from "expo-font";
+import EditProfile from "@/components/profile/EditProfile";
+import ChangePassword from "@/components/profile/ChangePassword";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+registerSheet("authentication", Authentication, "global");
+registerSheet("editProfile", EditProfile, "global");
+registerSheet("changePassword", ChangePassword, "global");
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
