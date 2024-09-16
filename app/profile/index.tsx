@@ -11,7 +11,7 @@ import { t } from "@/constants/strings";
 import ProfileInfo from "@/components/profile/ProfileInfo";
 import { Colors } from "@/constants/Colors";
 import { SheetManager } from "react-native-actions-sheet";
-import * as LocalAuthentication from "expo-local-authentication";
+import { authorizeBiometrics } from "@/helpers/biometricUtils";
 
 export default function ProfilePage() {
   const { title, label, message, button } = t.en.translation;
@@ -19,24 +19,7 @@ export default function ProfilePage() {
 
   const handleEditProfile = async () => {
     try {
-      const hasSecureHardware = await LocalAuthentication.hasHardwareAsync();
-      if (!hasSecureHardware) {
-        throw new Error(message.deviceNotSecure);
-      }
-
-      const securityLevel = await LocalAuthentication.getEnrolledLevelAsync();
-      if (
-        [
-          LocalAuthentication.SecurityLevel.NONE,
-          LocalAuthentication.SecurityLevel.BIOMETRIC_WEAK,
-        ].includes(securityLevel)
-      ) {
-        throw new Error(message.weakSecurity);
-      }
-      console.log(securityLevel);
-      const result = await LocalAuthentication.authenticateAsync({
-        promptMessage: message.biometricsPrompt,
-      });
+      const result = await authorizeBiometrics();
 
       if (result.success) {
         SheetManager.show("editProfile");

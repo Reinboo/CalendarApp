@@ -9,13 +9,14 @@ import ActionSheet, {
 import { t } from "@/constants/strings";
 import { ThemedTextInput } from "./ThemedTextInput";
 import { router } from "expo-router";
-import auth from "@react-native-firebase/auth";
 import { useRef, useState } from "react";
 import { Routes } from "@/constants/Routes";
+import useAuth from "@/hooks/useAuth";
 
 export default function Authentication(props: SheetProps<"authentication">) {
   const { title, message, label, button } = t.en.translation;
   const { isRegistering } = props.payload!;
+  const { signIn, createAccount } = useAuth();
 
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
@@ -30,9 +31,9 @@ export default function Authentication(props: SheetProps<"authentication">) {
           throw new Error(message.passwordsMissmatch);
         }
 
-        await auth().createUserWithEmailAndPassword(email, password);
+        await createAccount(email, password);
       } else {
-        await auth().signInWithEmailAndPassword(email, password);
+        await signIn(email, password);
       }
 
       router.replace(Routes.profile);

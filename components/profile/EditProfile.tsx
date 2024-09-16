@@ -12,10 +12,12 @@ import ActionSheet, {
   SheetManager,
 } from "react-native-actions-sheet";
 import EditProfileField from "./EditProfileField";
+import useAuth from "@/hooks/useAuth";
 
 export default function EditProfile() {
   const { title, label, message, button } = t.en.translation;
   const userContext = useUser();
+  const { updateName, updateEmail } = useAuth();
 
   const currentName = userContext?.user?.displayName;
   const currentEmail = userContext?.user?.email;
@@ -26,15 +28,13 @@ export default function EditProfile() {
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
   const handleUpdateProfile = async () => {
-    if (currentEmail === email && currentName === name) {
-      actionSheetRef.current?.hide();
-    }
-
     try {
-      await auth().currentUser?.updateProfile({
-        displayName: name,
-      });
-      await auth().currentUser?.updateEmail(email);
+      if (currentEmail !== email) {
+        await updateEmail(email);
+      }
+      if (currentName !== name) {
+        await updateName(name);
+      }
 
       actionSheetRef.current?.hide();
     } catch (error: any) {

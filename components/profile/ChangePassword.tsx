@@ -1,18 +1,17 @@
 import { Alert, StyleSheet } from "react-native";
-import auth from "@react-native-firebase/auth";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useUser } from "@/hooks/useUser";
 import { ThemedButton } from "@/components/ThemedButton";
 import { t } from "@/constants/strings";
 import { useRef, useState } from "react";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { ThemedTextInput } from "../ThemedTextInput";
+import useAuth from "@/hooks/useAuth";
 
 export default function ChangePassword() {
   const { title, label, message, button } = t.en.translation;
-  const userContext = useUser();
+  const { updatePassword } = useAuth();
 
   const [currentPassword, setCurrentPasswolrd] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
@@ -22,18 +21,11 @@ export default function ChangePassword() {
 
   const handleUpdateProfile = async () => {
     try {
-      const credential = await auth.EmailAuthProvider.credential(
-        userContext?.user?.email!,
-        currentPassword
-      );
-      // Reauthenticate to make sure that logged in user's credentials are still valid
-      await auth().currentUser?.reauthenticateWithCredential(credential);
-
       if (newPassword !== repeatedNewPassword) {
         throw new Error(message.passwordsMissmatch);
       }
 
-      await auth().currentUser?.updatePassword(newPassword);
+      await updatePassword(currentPassword, newPassword);
 
       actionSheetRef.current?.hide();
     } catch (error: any) {
