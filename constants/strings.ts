@@ -15,6 +15,7 @@ export const t = {
         create: "Create",
         forgotPassword: "Forgot password?",
         save: "Save",
+        changePassword: "Change password",
       },
       label: {
         name: "Name",
@@ -29,6 +30,7 @@ export const t = {
         loginFailed: "Login failed",
         passwordsMissmatch: "Passwords don't match",
         passwordChangeFailed: "Error changing password",
+        profileUpdateFailed: "Error updating profile",
       },
     },
   },
