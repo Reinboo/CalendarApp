@@ -7,57 +7,52 @@ import {
 } from "react-native";
 
 import { Colors } from "@/constants/Colors";
+import { Button, ButtonProps } from "react-native-paper";
 
-export type ThemedButtonProps = PressableProps & {
-  lightColor?: string;
-  darkColor?: string;
-  text: string;
-  type?: "default" | "defaultSemiBold" | "subtitle" | "link";
+export type ThemedButtonProps = ButtonProps & {
+  type?: "contained" | "text" | "link";
 };
 
 export function ThemedButton({
   style,
-  lightColor,
-  darkColor,
-  text,
-  type = "default",
+  type = "contained",
+  labelStyle,
+  contentStyle,
+  children,
   ...rest
 }: ThemedButtonProps) {
   return (
-    <Pressable
-      style={({ pressed }) =>
+    <Button
+      style={styles.shared}
+      contentStyle={
         [
-          { opacity: pressed ? 0.8 : 1 },
-          type === "default" ? styles.default : undefined,
-          type === "subtitle" ? styles.subtitle : undefined,
+          type === "contained" ? styles.contained : undefined,
+          type === "text" ? styles.text : undefined,
           type === "link" ? styles.link : undefined,
-          style,
+          contentStyle,
+        ] as ViewStyle[]
+      }
+      labelStyle={
+        [
+          type === "contained" ? styles.containedLabel : undefined,
+          type === "text" ? styles.textLabel : undefined,
+          type === "link" ? styles.linkLabel : undefined,
+          labelStyle,
         ] as ViewStyle[]
       }
       {...rest}
     >
-      <Text
-        style={[
-          styles.shared,
-          [
-            type === "default" ? styles.defaultText : undefined,
-            type === "subtitle" ? styles.subtitleText : undefined,
-            type === "link" ? styles.linkText : undefined,
-            style,
-          ] as ViewStyle[],
-        ]}
-      >
-        {text}
-      </Text>
-    </Pressable>
+      {children}
+    </Button>
   );
 }
 
 const styles = StyleSheet.create({
   shared: {
     fontFamily: "Inter",
+    width: "100%",
   },
-  default: {
+  contained: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -66,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: Colors.light.text,
   },
-  subtitle: {
+  text: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -77,18 +72,18 @@ const styles = StyleSheet.create({
   link: {
     lineHeight: 24,
   },
-  defaultText: {
+  containedLabel: {
     fontSize: 22,
     lineHeight: 24,
     fontFamily: "InterBold",
     color: Colors.light.background,
   },
-  subtitleText: {
+  textLabel: {
     fontSize: 20,
     fontFamily: "InterBold",
     color: Colors.light.text,
   },
-  linkText: {
+  linkLabel: {
     lineHeight: 30,
     fontSize: 18,
     color: Colors.light.highlight,
