@@ -1,7 +1,9 @@
+import { t } from "@/constants/strings";
 import auth from "@react-native-firebase/auth";
 import { useState } from "react";
 
 export default function useAuth() {
+  const { message } = t.en.translation;
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const updateName = async (newName: string) => {
@@ -17,6 +19,8 @@ export default function useAuth() {
   const updateEmail = async (email: string) => {
     setIsLoading(true);
 
+    if (!email) throw new Error(message.emailEmpty);
+
     await auth().currentUser?.updateEmail(email);
 
     setIsLoading(false);
@@ -27,6 +31,9 @@ export default function useAuth() {
     newPassword: string
   ) => {
     setIsLoading(true);
+
+    if (!newPassword || !currentPassword)
+      throw new Error(message.passwordEmpty);
 
     const currentUser = await auth().currentUser;
 
@@ -47,6 +54,10 @@ export default function useAuth() {
   const createAccount = async (email: string, password: string) => {
     setIsLoading(true);
 
+    if (!email) throw new Error(message.emailEmpty);
+
+    if (!password) throw new Error(message.passwordEmpty);
+
     await auth().createUserWithEmailAndPassword(email, password);
 
     setIsLoading(false);
@@ -55,7 +66,21 @@ export default function useAuth() {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
 
+    if (!email) throw new Error(message.emailEmpty);
+
+    if (!password) throw new Error(message.passwordEmpty);
+
     await auth().signInWithEmailAndPassword(email, password);
+
+    setIsLoading(false);
+  };
+
+  const forgotPassword = async (email: string) => {
+    setIsLoading(true);
+
+    if (!email) throw new Error(message.emailEmpty);
+
+    await auth().sendPasswordResetEmail(email);
 
     setIsLoading(false);
   };
@@ -67,5 +92,6 @@ export default function useAuth() {
     updatePassword,
     createAccount,
     signIn,
+    forgotPassword,
   };
 }
