@@ -3,7 +3,7 @@ export const t = {
     translation: {
       title: {
         welcome: "Welcome",
-        welcomeBack: "Welcome Back",
+        welcomeBack: "Welcome back",
         createAccount: "Create an Account",
         profile: "Profile",
         editProfile: "Edit profile",
@@ -11,6 +11,7 @@ export const t = {
       },
       button: {
         signIn: "Sign in",
+        register: "Register",
         signOut: "Sign out",
         createAccount: "Create an account",
         create: "Create",
@@ -40,6 +41,8 @@ export const t = {
           "Your device is not secure enough. Try securing your device with a fingerprint, face scan, PIN, pattern, etc.",
         biometricsPrompt: "Authenticate with biometrics to edit profile",
         authorizationFailed: "Error while authorizing the change",
+        emailEmpty: "You must enter an email",
+        passwordEmpty: "You must enter a password",
       },
     },
   },

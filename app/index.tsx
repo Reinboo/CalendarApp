@@ -1,17 +1,19 @@
 import { ImageBackground, StyleSheet } from "react-native";
 import { SheetManager } from "react-native-actions-sheet";
 import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedButton } from "@/components/ThemedButton";
 import { Colors } from "@/constants/Colors";
 import { useLayoutEffect } from "react";
 import auth from "@react-native-firebase/auth";
 import { router, useRootNavigationState } from "expo-router";
 import { Routes } from "@/constants/Routes";
+import { Text } from "react-native-paper";
+import { t } from "@/constants/strings";
 
 const WelcomeBackground = require("@/assets/images/background.png");
 
 export default function WelcomePage() {
+  const { button, title } = t.en.translation;
   const rootNavigationState = useRootNavigationState();
 
   useLayoutEffect(() => {
@@ -41,15 +43,17 @@ export default function WelcomePage() {
     >
       <ThemedView style={styles.container}>
         <ThemedView style={styles.titleContainer}>
-          <ThemedText style={styles.titleText}>Welcome</ThemedText>
+          <Text style={styles.titleText} variant="bodyMedium">
+            {title.welcome}
+          </Text>
         </ThemedView>
         <ThemedView style={styles.buttonsContainer}>
-          <ThemedButton text="Sign in" onPress={handlePressSignInSheet} />
-          <ThemedButton
-            text="Create an account"
-            type="subtitle"
-            onPress={handlePressRegisterSheet}
-          />
+          <ThemedButton onPress={handlePressSignInSheet}>
+            {button.signIn}
+          </ThemedButton>
+          <ThemedButton type="text" onPress={handlePressRegisterSheet}>
+            {button.createAccount}
+          </ThemedButton>
         </ThemedView>
       </ThemedView>
     </ImageBackground>

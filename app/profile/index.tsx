@@ -1,7 +1,6 @@
 import { Alert, StyleSheet } from "react-native";
 import auth from "@react-native-firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Avatar } from "@rneui/themed";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -12,10 +11,13 @@ import ProfileInfo from "@/components/profile/ProfileInfo";
 import { Colors } from "@/constants/Colors";
 import { SheetManager } from "react-native-actions-sheet";
 import { authorizeBiometrics } from "@/helpers/biometricUtils";
+import { Avatar } from "react-native-paper";
+import { useSnackbar } from "@/hooks/useSnackbar";
 
 export default function ProfilePage() {
   const { title, label, message, button } = t.en.translation;
   const userContext = useUser();
+  const { showSnackbar } = useSnackbar();
 
   const handleEditProfile = async () => {
     try {
@@ -24,10 +26,10 @@ export default function ProfilePage() {
       if (result.success) {
         SheetManager.show("editProfile");
       } else {
-        Alert.alert(result.error || message.authorizationFailed);
+        showSnackbar(`${message.authorizationFailed}: ${result.error}`);
       }
     } catch (error: any) {
-      Alert.alert(error?.message || message.authorizationFailed);
+      showSnackbar(`${message.authorizationFailed}: ${error?.message}`);
     }
   };
 
@@ -37,13 +39,7 @@ export default function ProfilePage() {
         <ThemedText type="title">{title.profile}</ThemedText>
       </ThemedView>
       <ThemedView style={styles.avatarContainer}>
-        <Avatar
-          size={170}
-          rounded
-          containerStyle={{ backgroundColor: "purple" }}
-          title="TD"
-          source={undefined}
-        />
+        <Avatar.Icon size={170} icon="account" />
       </ThemedView>
       <ThemedView style={styles.infoContainer}>
         <ProfileInfo
@@ -81,14 +77,17 @@ export default function ProfilePage() {
         />
       </ThemedView>
       <ThemedView style={styles.buttonContainer}>
-        <ThemedButton onPress={handleEditProfile} text={button.editProfile} />
+        <ThemedButton onPress={handleEditProfile}>
+          {button.editProfile}
+        </ThemedButton>
         <ThemedButton
           onPress={() => {
             auth().signOut();
           }}
-          text={button.signOut}
           type="link"
-        />
+        >
+          {button.signOut}
+        </ThemedButton>
       </ThemedView>
     </ThemedView>
   );

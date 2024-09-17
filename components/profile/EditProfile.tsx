@@ -13,11 +13,13 @@ import ActionSheet, {
 } from "react-native-actions-sheet";
 import EditProfileField from "./EditProfileField";
 import useAuth from "@/hooks/useAuth";
+import { useSnackbar } from "@/hooks/useSnackbar";
 
 export default function EditProfile() {
   const { title, label, message, button } = t.en.translation;
   const userContext = useUser();
-  const { updateName, updateEmail } = useAuth();
+  const { showSnackbar } = useSnackbar();
+  const { updateName, updateEmail, isLoading } = useAuth();
 
   const currentName = userContext?.user?.displayName;
   const currentEmail = userContext?.user?.email;
@@ -38,7 +40,7 @@ export default function EditProfile() {
 
       actionSheetRef.current?.hide();
     } catch (error: any) {
-      Alert.alert(error?.message || message.profileUpdateFailed);
+      showSnackbar(`${message.profileUpdateFailed}: ${error?.message}`);
     }
   };
 
@@ -47,6 +49,7 @@ export default function EditProfile() {
       headerAlwaysVisible
       containerStyle={styles.sheetContainer}
       ref={actionSheetRef}
+      isModal={false}
     >
       <ThemedView style={styles.container}>
         <ThemedView style={styles.titleContainer}>
@@ -69,12 +72,15 @@ export default function EditProfile() {
             onPress={() => {
               SheetManager.show("changePassword");
             }}
-            text={button.changePassword}
             type="link"
-          />
+          >
+            {button.changePassword}
+          </ThemedButton>
         </ThemedView>
         <ThemedView style={styles.buttonContainer}>
-          <ThemedButton onPress={handleUpdateProfile} text={button.save} />
+          <ThemedButton onPress={handleUpdateProfile} loading={isLoading}>
+            {button.save}
+          </ThemedButton>
         </ThemedView>
       </ThemedView>
     </ActionSheet>

@@ -25,9 +25,10 @@ export default function EditProfileField({
         <Ionicons size={36} name={iconName} color={Colors.light.highlight} />
       </ThemedView>
       <ThemedTextInput
-        placeholder={placeholder}
+        label={placeholder}
         value={value}
         onChangeText={onChange}
+        style={{ flexGrow: 1 }}
       />
     </ThemedView>
   );
@@ -35,6 +36,7 @@ export default function EditProfileField({
 
 const styles = StyleSheet.create({
   infoContainer: {
+    flexGrow: 1,
     flexDirection: "row",
     gap: 16,
   },

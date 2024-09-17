@@ -9,20 +9,24 @@ import ActionSheet, {
 import { t } from "@/constants/strings";
 import { ThemedTextInput } from "./ThemedTextInput";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Routes } from "@/constants/Routes";
 import useAuth from "@/hooks/useAuth";
+import { useSnackbar } from "@/hooks/useSnackbar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Authentication(props: SheetProps<"authentication">) {
   const { title, message, label, button } = t.en.translation;
   const { isRegistering } = props.payload!;
-  const { signIn, createAccount } = useAuth();
+  const { signIn, createAccount, forgotPassword, isLoading } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [repeatPassword, setRepeatPassword] = useState<string>("");
+  const [isInvalid, setIsInvalid] = useState<boolean>(false);
 
   const handleAuthentication = async () => {
     try {
@@ -39,15 +43,33 @@ export default function Authentication(props: SheetProps<"authentication">) {
       router.replace(Routes.events);
       actionSheetRef.current?.hide();
     } catch (error: any) {
-      Alert.alert(message.loginFailed, error.message);
+      setIsInvalid(true);
+      showSnackbar(`${message.loginFailed}: ${error.message}`);
     }
   };
 
+  const handleForgotPassword = async () => {
+    try {
+      await forgotPassword(email);
+    } catch (error: any) {
+      setIsInvalid(true);
+      showSnackbar(error?.message);
+    }
+  };
+
+  useEffect(() => {
+    setIsInvalid(false);
+  }, [email, password, repeatPassword]);
+
+  const insets = useSafeAreaInsets();
   return (
     <ActionSheet
       headerAlwaysVisible
       containerStyle={styles.sheetContainer}
       ref={actionSheetRef}
+      isModal={false}
+      useBottomSafeAreaPadding
+      safeAreaInsets={insets}
     >
       <ThemedView style={styles.container}>
         <ThemedView style={styles.titleContainer}>
@@ -57,17 +79,19 @@ export default function Authentication(props: SheetProps<"authentication">) {
         </ThemedView>
         <ThemedView style={styles.formContainer}>
           <ThemedTextInput
-            placeholder={label.email}
+            label={label.email}
             autoComplete="email"
             value={email}
             onChangeText={setEmail}
+            error={isInvalid}
           />
           <ThemedTextInput
-            placeholder={label.password}
+            label={label.password}
             secureTextEntry
             autoComplete="password"
             value={password}
             onChangeText={setPassword}
+            error={isInvalid}
           />
           {isRegistering ? (
             <ThemedTextInput
@@ -75,18 +99,21 @@ export default function Authentication(props: SheetProps<"authentication">) {
               secureTextEntry
               value={repeatPassword}
               onChangeText={setRepeatPassword}
+              error={isInvalid}
             />
           ) : (
-            <ThemedButton type="link" text={button.forgotPassword} />
+            <ThemedButton
+              type="link"
+              contentStyle={styles.forgotPassword}
+              onPress={handleForgotPassword}
+            >
+              {button.forgotPassword}
+            </ThemedButton>
           )}
-          <ThemedButton text={button.signIn} onPress={handleAuthentication} />
+          <ThemedButton onPress={handleAuthentication} loading={isLoading}>
+            {isRegistering ? button.register : button.signIn}
+          </ThemedButton>
         </ThemedView>
-        {/* <ThemedView style={styles.separatorContainer}>
-          <ThemedText>Separator</ThemedText>
-        </ThemedView>
-        <ThemedView>
-          <ThemedText>Social</ThemedText>
-        </ThemedView> */}
       </ThemedView>
     </ActionSheet>
   );
@@ -100,6 +127,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: 100,
+    gap: 32,
   },
   titleContainer: {
     display: "flex",
@@ -111,9 +139,7 @@ const styles = StyleSheet.create({
     display: "flex",
     gap: 16,
   },
-  separatorContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+  forgotPassword: {
+    alignSelf: "flex-start",
   },
 });

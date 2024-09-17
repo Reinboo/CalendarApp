@@ -42,10 +42,9 @@ export default function EventsPage() {
         <ThemedText>No events. Press '+' button to add new</ThemedText>
       )}
       <FAB icon="plus" style={styles.fab} color={Colors.light.background} />
-      <ThemedButton
-        onPress={() => router.push(Routes.profile)}
-        text="Profile"
-      />
+      <ThemedButton onPress={() => router.push(Routes.profile)}>
+        Profile
+      </ThemedButton>
     </ThemedView>
   );
 }

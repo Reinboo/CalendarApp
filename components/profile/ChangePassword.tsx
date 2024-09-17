@@ -8,12 +8,14 @@ import { useRef, useState } from "react";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
 import { ThemedTextInput } from "../ThemedTextInput";
 import useAuth from "@/hooks/useAuth";
+import { useSnackbar } from "@/hooks/useSnackbar";
 
 export default function ChangePassword() {
   const { title, label, message, button } = t.en.translation;
-  const { updatePassword } = useAuth();
+  const { updatePassword, isLoading } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
-  const [currentPassword, setCurrentPasswolrd] = useState<string>("");
+  const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [repeatedNewPassword, setRepeatedNewPassword] = useState<string>("");
 
@@ -29,7 +31,7 @@ export default function ChangePassword() {
 
       actionSheetRef.current?.hide();
     } catch (error: any) {
-      Alert.alert(error?.message || message.passwordChangeFailed);
+      showSnackbar(`${message.passwordChangeFailed}: ${error?.message}`);
     }
   };
 
@@ -38,6 +40,7 @@ export default function ChangePassword() {
       headerAlwaysVisible
       containerStyle={styles.sheetContainer}
       ref={actionSheetRef}
+      isModal={false}
     >
       <ThemedView style={styles.container}>
         <ThemedView style={styles.titleContainer}>
@@ -46,27 +49,25 @@ export default function ChangePassword() {
         <ThemedView style={styles.infoContainer}>
           <ThemedView style={styles.currentPasswordContainer}>
             <ThemedTextInput
-              placeholder={label.currentPassword}
+              label={label.currentPassword}
               value={currentPassword}
-              onChangeText={setCurrentPasswolrd}
+              onChangeText={setCurrentPassword}
               autoComplete="password"
               secureTextEntry
             />
-            <ThemedButton
-              onPress={() => {}}
-              text={button.forgotPassword}
-              type="link"
-            />
+            <ThemedButton onPress={() => {}} type="link">
+              {button.forgotPassword}
+            </ThemedButton>
           </ThemedView>
           <ThemedView style={styles.newPasswordContainer}>
             <ThemedTextInput
-              placeholder={label.newPassword}
+              label={label.newPassword}
               value={newPassword}
               onChangeText={setNewPassword}
               secureTextEntry
             />
             <ThemedTextInput
-              placeholder={label.repeatNewPassword}
+              label={label.repeatNewPassword}
               value={repeatedNewPassword}
               onChangeText={setRepeatedNewPassword}
               secureTextEntry
@@ -76,9 +77,11 @@ export default function ChangePassword() {
         <ThemedView>
           <ThemedButton
             onPress={handleUpdateProfile}
-            text={button.save}
             disabled={!currentPassword || !newPassword || !repeatedNewPassword}
-          />
+            loading={isLoading}
+          >
+            {button.save}
+          </ThemedButton>
         </ThemedView>
       </ThemedView>
     </ActionSheet>

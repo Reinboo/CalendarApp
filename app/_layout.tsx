@@ -21,6 +21,8 @@ import Authentication from "@/components/Authentication";
 import { useFonts } from "expo-font";
 import EditProfile from "@/components/profile/EditProfile";
 import ChangePassword from "@/components/profile/ChangePassword";
+import { SnackbarProvider } from "@/hooks/useSnackbar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,6 +33,7 @@ registerSheet("changePassword", ChangePassword, "global");
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
   const [loaded] = useFonts({
     InterBolder: Inter_900Black,
     InterBold: Inter_600SemiBold,
@@ -50,14 +53,18 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <SheetProvider>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="profile" options={{ headerShown: false }} />
-            <Stack.Screen name="events" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </SheetProvider>
+        <SnackbarProvider>
+          <GestureHandlerRootView>
+            <SheetProvider>
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="profile" options={{ headerShown: false }} />
+                <Stack.Screen name="events" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </SheetProvider>
+          </GestureHandlerRootView>
+        </SnackbarProvider>
       </ThemeProvider>
     </UserProvider>
   );
