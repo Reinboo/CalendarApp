@@ -1,20 +1,59 @@
-# Welcome to your Expo app 👋
+# Calendar App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Description
 
-## Get started
+This is a basic CRUD (Create, Read, Update, Delete) calendar application built with React Native using Expo. The app allows users to manage calendar events with full CRUD functionality. Authentication is handled via Firebase, and events are stored in Firestore.
 
-1. Install dependencies
+## Features
+
+- **Authentication**: Sign up, sign in, and sign out using Firebase Authentication.
+- **Event Management**: Create, view, update, and delete calendar events.
+- **Firestore Integration**: Store and retrieve events from Firestore.
+
+## Screenshots
+
+## Requirements
+
+- **Node.js**: Version 12 or higher
+- **Expo CLI**: Install globally with `npm install -g expo-cli`
+- **Java Development Kit (JDK)**: Required for Android development. Ensure you have JDK 8 or higher installed.
+- **Android Studio**: For Android emulator and development tools.
+- **Xcode**: For iOS development (macOS only).
+
+## Setup
+
+Follow these steps to set up the project on your local machine:
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/Reinboo/CalendarApp.git
+   cd CalendarApp
+   ```
+
+2. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Add Firebase Configuration
+
+- Create a Firebase project if you haven't already.
+- Download the google-services.json for Android and GoogleService-Info.plist for iOS from the Firebase console.
+- Place the google-services.json file in the android/app directory.
+- Place the GoogleService-Info.plist file in the ios/CalendarApp directory.
+
+4. Start the app
 
    ```bash
     npx expo start
    ```
+
+5. Running on Mobile Devices
+
+- Android: Use the Expo Go app from the Google Play Store or Android Emulator.
+- iOS: Use the Expo Go app from the App Store or an iOS Simulator (Xcode required).
 
 In the output, you'll find options to open the app in a
 
@@ -22,29 +61,3 @@ In the output, you'll find options to open the app in a
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
