@@ -28,7 +28,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setUser(user);
         setIsAuthenticated(true);
 
-        router.replace(Routes.profile); // TODO: Change to calendar
+        router.replace(Routes.events);
       } else {
         setUser(null);
         setIsAuthenticated(false);

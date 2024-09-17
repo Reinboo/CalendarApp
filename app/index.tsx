@@ -21,7 +21,7 @@ export default function WelcomePage() {
       user !== null &&
       rootNavigationState?.routeNames?.includes(Routes.profile.substring(1))
     ) {
-      router.replace(Routes.profile);
+      router.replace(Routes.events);
     }
   }, [rootNavigationState]);
 

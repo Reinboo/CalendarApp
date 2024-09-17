@@ -12,6 +12,12 @@ export interface FirebaseEventData extends EventData {
   id: string;
 }
 
+export interface AgendaData {
+  hour: string;
+  duration: string;
+  title: string;
+}
+
 export default function useEvents() {
   const [events, setEvents] = useState<FirebaseEventData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -22,6 +28,7 @@ export default function useEvents() {
     setLoading(true);
     try {
       const snapshot = await firestore().collection("events").get();
+
       const eventsList = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),

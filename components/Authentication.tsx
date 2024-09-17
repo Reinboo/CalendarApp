@@ -36,7 +36,7 @@ export default function Authentication(props: SheetProps<"authentication">) {
         await signIn(email, password);
       }
 
-      router.replace(Routes.profile);
+      router.replace(Routes.events);
       actionSheetRef.current?.hide();
     } catch (error: any) {
       Alert.alert(message.loginFailed, error.message);
