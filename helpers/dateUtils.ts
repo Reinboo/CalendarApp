@@ -17,17 +17,6 @@ export function getHoursBetweenTimestamps(startISO: string, endISO: string) {
   return `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 }
 
-export function filterEventsWithDate(date: string) {
-  // TODO: Validate date
-  const shorthandDate = new Date(date).toISOString().split("T")[0];
-
-  return function (event: FirebaseEventData) {
-    if (!event.startDateTime) return false;
-
-    return event.startDateTime.startsWith(shorthandDate);
-  };
-}
-
 export function getHoursRange(startDate: string, endDate: string) {
   const timeFormatter = new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",

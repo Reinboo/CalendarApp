@@ -4,8 +4,8 @@ import firestore from "@react-native-firebase/firestore";
 
 export interface EventData {
   title: string;
-  startDateTime: string;
-  endDateTime: string;
+  startDate: string;
+  startTime: string;
 }
 
 export interface FirebaseEventData extends EventData {
@@ -16,6 +16,17 @@ export interface AgendaData {
   hour: string;
   duration: string;
   title: string;
+}
+
+export function filterEventsWithDate(date: string) {
+  // TODO: Validate date
+  const shorthandDate = new Date(date).toISOString().split("T")[0];
+
+  return function (event: FirebaseEventData) {
+    if (!event.startDate) return false;
+
+    return event.startDate.startsWith(shorthandDate);
+  };
 }
 
 export default function useEvents() {
@@ -61,7 +72,6 @@ export default function useEvents() {
   ) => {
     try {
       await firestore().collection("events").doc(eventId).update(updatedData);
-      console.log("Event updated");
       fetchEvents(); // Refresh the events list
     } catch (err: any) {
       setError(err);
@@ -72,7 +82,6 @@ export default function useEvents() {
   const deleteEvent = async (eventId: string) => {
     try {
       await firestore().collection("events").doc(eventId).delete();
-      console.log("Event deleted");
       fetchEvents(); // Refresh the events list
     } catch (err: any) {
       setError(err);

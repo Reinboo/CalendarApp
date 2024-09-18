@@ -23,6 +23,7 @@ import EditProfile from "@/components/profile/EditProfile";
 import ChangePassword from "@/components/profile/ChangePassword";
 import { SnackbarProvider } from "@/hooks/useSnackbar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import CreateEvent from "@/components/Events/CreateEvent";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,6 +31,7 @@ SplashScreen.preventAutoHideAsync();
 registerSheet("authentication", Authentication, "global");
 registerSheet("editProfile", EditProfile, "global");
 registerSheet("changePassword", ChangePassword, "global");
+registerSheet("createEvent", CreateEvent, "global");
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
