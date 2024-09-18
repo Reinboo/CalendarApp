@@ -3,7 +3,7 @@ import { SheetManager } from "react-native-actions-sheet";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedButton } from "@/components/ThemedButton";
 import { Colors } from "@/constants/Colors";
-import { useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 import auth from "@react-native-firebase/auth";
 import { router, useRootNavigationState } from "expo-router";
 import { Routes } from "@/constants/Routes";
@@ -16,7 +16,9 @@ export default function WelcomePage() {
   const { button, title } = t.en.translation;
   const rootNavigationState = useRootNavigationState();
 
-  useLayoutEffect(() => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
     const user = auth().currentUser;
 
     if (
@@ -25,6 +27,7 @@ export default function WelcomePage() {
     ) {
       router.replace(Routes.events);
     }
+    setIsLoading(false);
   }, [rootNavigationState]);
 
   const handlePressSignInSheet = async () => {
@@ -48,12 +51,20 @@ export default function WelcomePage() {
           </Text>
         </ThemedView>
         <ThemedView style={styles.buttonsContainer}>
-          <ThemedButton onPress={handlePressSignInSheet}>
-            {button.signIn}
-          </ThemedButton>
-          <ThemedButton type="text" onPress={handlePressRegisterSheet}>
-            {button.createAccount}
-          </ThemedButton>
+          {isLoading ? (
+            <ThemedButton type="text" loading={true}>
+              {``}
+            </ThemedButton>
+          ) : (
+            <>
+              <ThemedButton onPress={handlePressSignInSheet}>
+                {button.signIn}
+              </ThemedButton>
+              <ThemedButton type="text" onPress={handlePressRegisterSheet}>
+                {button.createAccount}
+              </ThemedButton>
+            </>
+          )}
         </ThemedView>
       </ThemedView>
     </ImageBackground>
