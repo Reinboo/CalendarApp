@@ -56,12 +56,10 @@ export default function EventsPage() {
       >
         {selectedDateEvents.length ? (
           selectedDateEvents.map(({ id, title, startTime }) => (
-            <Card key={id}>
-              <ThemedView style={styles.eventContainer}>
-                <ThemedText style={styles.eventTitle}>{title}</ThemedText>
-                <ThemedText style={styles.eventDate}>{startTime}</ThemedText>
-              </ThemedView>
-            </Card>
+            <ThemedView key={id} style={styles.eventContainer}>
+              <ThemedText style={styles.eventTitle}>{title}</ThemedText>
+              <ThemedText style={styles.eventDate}>{startTime}</ThemedText>
+            </ThemedView>
           ))
         ) : (
           <ThemedView style={styles.noEventsContainer}>
@@ -88,7 +86,6 @@ export default function EventsPage() {
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-    backgroundColor: "red",
   },
   fab: {
     position: "absolute",
