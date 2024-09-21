@@ -1,5 +1,4 @@
-import { Alert, StyleSheet } from "react-native";
-import auth from "@react-native-firebase/auth";
+import { StyleSheet } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
@@ -17,12 +16,12 @@ import { useSnackbar } from "@/hooks/useSnackbar";
 
 export default function EditProfile() {
   const { title, label, message, button } = t.en.translation;
-  const userContext = useUser();
+  const { user } = useUser();
   const { showSnackbar } = useSnackbar();
   const { updateName, updateEmail, isLoading } = useAuth();
 
-  const currentName = userContext?.user?.displayName;
-  const currentEmail = userContext?.user?.email;
+  const currentName = user?.displayName;
+  const currentEmail = user?.email;
 
   const [name, setName] = useState<string>(currentName || "");
   const [email, setEmail] = useState<string>(currentEmail || "");

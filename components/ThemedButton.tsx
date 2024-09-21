@@ -1,10 +1,4 @@
-import {
-  Pressable,
-  Text,
-  type PressableProps,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 
 import { Colors } from "@/constants/Colors";
 import { Button, ButtonProps } from "react-native-paper";

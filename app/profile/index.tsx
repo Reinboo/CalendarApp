@@ -16,7 +16,7 @@ import { useSnackbar } from "@/hooks/useSnackbar";
 
 export default function ProfilePage() {
   const { title, label, message, button } = t.en.translation;
-  const userContext = useUser();
+  const { user } = useUser();
   const { showSnackbar } = useSnackbar();
 
   const handleEditProfile = async () => {
@@ -44,7 +44,7 @@ export default function ProfilePage() {
       <ThemedView style={styles.infoContainer}>
         <ProfileInfo
           label={label.name}
-          text={userContext?.user?.displayName || "-"}
+          text={user?.displayName || "-"}
           icon={
             <Ionicons
               size={36}
@@ -55,7 +55,7 @@ export default function ProfilePage() {
         />
         <ProfileInfo
           label={label.email}
-          text={userContext?.user?.email || ""}
+          text={user?.email || ""}
           icon={
             <Ionicons
               size={36}
