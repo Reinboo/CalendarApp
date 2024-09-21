@@ -12,6 +12,15 @@ This is a basic CRUD (Create, Read, Update, Delete) calendar application built w
 
 ## Screenshots
 
+<details>
+  <summary>Expand</summary>
+  
+  ![Welcome screen](assets/images/screen-1.jpg)
+  ![Authentication](assets/images/screen-2.jpg)
+  ![Event CRUD](assets/images/screen-3.jpg)
+  ![Events list](assets/images/screen-4.jpg)
+</details>
+
 ## Requirements
 
 - **Node.js**: Version 12 or higher
