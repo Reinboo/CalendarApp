@@ -14,6 +14,7 @@ export function ThemedTextInput({
     <TextInput
       mode="outlined"
       contentStyle={[styles.defaultWrapper, style]}
+      outlineStyle={styles.outlineStyle}
       outlineColor={Colors.light.text}
       activeOutlineColor={Colors.light.text}
       selectionColor={Colors.light.text}
@@ -35,5 +36,10 @@ const styles = StyleSheet.create({
   default: {
     height: 70,
     lineHeight: 24,
+    backgroundColor: "white",
+  },
+  outlineStyle: {
+    borderRadius: 16,
+    borderColor: Colors.light.subText,
   },
 });

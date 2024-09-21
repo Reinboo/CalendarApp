@@ -5,7 +5,6 @@ declare module "react-native-actions-sheet" {
     authentication: SheetDefinition<{ payload: { isRegistering?: boolean } }>;
     editProfile: SheetDefinition;
     changePassword: SheetDefinition;
-    createEvent: SheetDefinition<{ payload: { isEditing?: boolean } }>;
   }
 }
 

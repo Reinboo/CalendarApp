@@ -29,3 +29,15 @@ export function getHoursRange(startDate: string, endDate: string) {
 
   return `${startTime} - ${endTime}`;
 }
+
+export function getTime(date: Date | string) {
+  const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const formattedTime = timeFormatter.format(new Date(date));
+
+  return formattedTime;
+}

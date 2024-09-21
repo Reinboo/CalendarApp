@@ -1,30 +1,31 @@
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Routes } from "@/constants/Routes";
-import useEvents, { filterEventsWithDate } from "@/hooks/useEvents";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExpandableCalendar } from "react-native-calendars";
-import { Card, AnimatedFAB, Appbar } from "react-native-paper";
+import { AnimatedFAB, Appbar, Portal, Modal } from "react-native-paper";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
-  ScrollView,
   StyleSheet,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { SheetManager } from "react-native-actions-sheet";
+import EventDetails from "@/components/Events/EventDetails";
+import EventsList from "@/components/Events/EventsList";
+import { EventData, FirebaseEventData } from "@/hooks/useEvents";
+import { t } from "@/constants/strings";
 
 export default function EventsPage() {
-  const { events } = useEvents();
-
+  const { title, label } = t.en.translation;
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString()
   );
   const [isFABExpanded, setIsFABExpanded] = useState<boolean>(true);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [editEventDetails, setEditEventDetails] =
+    useState<FirebaseEventData | null>(null);
 
-  const selectedDateEvents = events.filter(filterEventsWithDate(selectedDate));
-
+  // Collapse/expand FAB on scroll
   const handleEventsScroll = ({
     nativeEvent,
   }: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -34,10 +35,33 @@ export default function EventsPage() {
     setIsFABExpanded(currentScrollPosition <= 0);
   };
 
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleDateChange = (date: { timestamp: number }) => {
+    setSelectedDate(new Date(date.timestamp).toISOString());
+  };
+
+  const handleEditEvent = (eventData: FirebaseEventData) => {
+    setEditEventDetails(eventData);
+  };
+
+  const handleSubmitEventChange = (eventData: EventData) => {
+    setEditEventDetails(null);
+    hideModal();
+  };
+
+  useEffect(() => {
+    if (editEventDetails) {
+      setIsModalVisible(true);
+    }
+  }, [editEventDetails]);
+
   return (
     <ThemedView style={styles.container}>
       <Appbar.Header>
-        <Appbar.Content title="Events" />
+        <Appbar.Content title={title.events} />
         <Appbar.Action
           icon="account"
           onPress={() => router.push(Routes.profile)}
@@ -45,40 +69,38 @@ export default function EventsPage() {
       </Appbar.Header>
       <ExpandableCalendar
         date={selectedDate}
-        onDayPress={(date) => {
-          setSelectedDate(new Date(date.timestamp).toISOString());
-        }}
+        onDayPress={handleDateChange}
         animateScroll
       />
-      <ScrollView
-        onScroll={handleEventsScroll}
-        contentContainerStyle={styles.eventsScrollView}
-      >
-        {selectedDateEvents.length ? (
-          selectedDateEvents.map(({ id, title, startTime }) => (
-            <ThemedView key={id} style={styles.eventContainer}>
-              <ThemedText style={styles.eventTitle}>{title}</ThemedText>
-              <ThemedText style={styles.eventDate}>{startTime}</ThemedText>
-            </ThemedView>
-          ))
-        ) : (
-          <ThemedView style={styles.noEventsContainer}>
-            <ThemedText type="default">No events for selected date</ThemedText>
-          </ThemedView>
-        )}
-      </ScrollView>
+      <EventsList
+        onEventsScroll={handleEventsScroll}
+        onEdit={handleEditEvent}
+        date={selectedDate}
+      />
       <AnimatedFAB
         icon="plus"
         style={styles.fab}
         color={Colors.light.background}
         extended={isFABExpanded}
-        label={"New event"}
+        label={label.newEvent}
         animateFrom="right"
         elevation={5}
         onPress={() => {
-          SheetManager.show("createEvent");
+          setIsModalVisible(true);
         }}
       />
+      <Portal>
+        <Modal
+          visible={isModalVisible}
+          onDismiss={hideModal}
+          contentContainerStyle={styles.modal}
+        >
+          <EventDetails
+            onSubmit={handleSubmitEventChange}
+            eventData={editEventDetails}
+          />
+        </Modal>
+      </Portal>
     </ThemedView>
   );
 }
@@ -95,28 +117,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.text,
     zIndex: 99,
   },
-  eventsScrollView: {
-    flexGrow: 1,
-    height: "100%",
-  },
-  eventContainer: {
-    backgroundColor: "white",
-    borderLeftWidth: 3,
-    borderLeftColor: "darkgrey",
-    padding: 12,
-    marginVertical: 5,
-  },
-  eventTitle: {
-    fontSize: 18,
-    fontFamily: "InterBold",
-  },
-  eventDate: {
-    color: "darkgrey",
-  },
-  noEventsContainer: {
-    flexGrow: 1,
-    backgroundColor: Colors.light.background,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  modal: { padding: 16 },
 });

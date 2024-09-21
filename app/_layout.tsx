@@ -23,7 +23,7 @@ import EditProfile from "@/components/profile/EditProfile";
 import ChangePassword from "@/components/profile/ChangePassword";
 import { SnackbarProvider } from "@/hooks/useSnackbar";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import CreateEvent from "@/components/Events/CreateEvent";
+import { EventsProvider } from "@/hooks/useEvents";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,7 +31,6 @@ SplashScreen.preventAutoHideAsync();
 registerSheet("authentication", Authentication, "global");
 registerSheet("editProfile", EditProfile, "global");
 registerSheet("changePassword", ChangePassword, "global");
-registerSheet("createEvent", CreateEvent, "global");
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -54,20 +53,30 @@ export default function RootLayout() {
 
   return (
     <UserProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <SnackbarProvider>
-          <GestureHandlerRootView>
-            <SheetProvider>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="profile" options={{ headerShown: false }} />
-                <Stack.Screen name="events" options={{ headerShown: false }} />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-            </SheetProvider>
-          </GestureHandlerRootView>
-        </SnackbarProvider>
-      </ThemeProvider>
+      <EventsProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <SnackbarProvider>
+            <GestureHandlerRootView>
+              <SheetProvider>
+                <Stack>
+                  <Stack.Screen name="index" options={{ headerShown: false }} />
+                  <Stack.Screen
+                    name="profile"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="events"
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+              </SheetProvider>
+            </GestureHandlerRootView>
+          </SnackbarProvider>
+        </ThemeProvider>
+      </EventsProvider>
     </UserProvider>
   );
 }
